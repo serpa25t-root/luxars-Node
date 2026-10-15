@@ -53,7 +53,11 @@ npm start            # abre la app en http://localhost:3000
 - Respaldos: `servicios/backup.js` (`backupDatabase`) genera cada medianoche una
   instantanea JSON en `backup/AAAA-MM-DD-HHMMSS/` (`reservas.json`, `fotografos.json`,
   `meta.json`), programada con `node-cron` desde `server.js` (`0 0 0 * * *`,
-  configurable con `BACKUP_CRON`). Los respaldos estan ignorados por git.
+  configurable con `BACKUP_CRON`). Con `generarArchivoComprimido` junta todo en un
+  unico `luxars_AAAA-MM-DD-HHMMSS.archive.gz` (equivale a `mongodump --archive --gzip`)
+  y `enviarRespaldoPorCorreo` lo manda por Gmail con `nodemailer` (configurado con
+  `MAIL_USER`, `MAIL_PASS` y `MAIL_TO` en el `.env`; sin esas variables solo guarda
+  local y avisa en el log). Los respaldos estan ignorados por git.
 - Los endpoints de reservas requieren sesion (401 si no).
 
 ### 2.3 Frontend - `public/js/script.js`

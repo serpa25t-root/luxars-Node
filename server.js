@@ -57,6 +57,11 @@ if (cron.validate(HORARIO_RESPALDO)) {
     } catch (error) {
       console.error('Respaldo programado fallido:', error.message);
     }
+    try {
+      await backup.enviarRespaldoPorCorreo();
+    } catch (error) {
+      console.error('Envio programado fallido:', error.message);
+    }
   });
 } else {
   console.error('BACKUP_CRON invalido, respaldo diario desactivado: ' + HORARIO_RESPALDO);
