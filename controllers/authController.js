@@ -1,4 +1,5 @@
 const { getSupabase } = require('../lib/supabase');
+const logger = require('../lib/logger');
 
 async function getProfile(req, res) {
   const supabase = getSupabase();
@@ -43,6 +44,7 @@ async function updateProfile(req, res) {
   if (error) {
     return res.status(500).json({ error: error.message });
   }
+  logger.registrarEvento('Perfil actualizado', req.user);
   return res.json({ user: data });
 }
 

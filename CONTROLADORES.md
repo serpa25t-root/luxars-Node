@@ -46,6 +46,10 @@ npm start            # abre la app en http://localhost:3000
 
 - Datos: `data/photographers.js` (16 fotografos) y `data/bookings.js` (reservas en memoria).
 - Auth: `middleware/auth.js` valida JWT de Supabase o el header `x-demo-user` (modo demo).
+- Logs: `lib/logger.js` guarda un archivo diario en `logs/AAAA-MM-DD.log` con formato
+  `[fechaISO] accion="..." usuario="..."`. Registra arranque del servidor, cada
+  peticion a `/api` (middleware `requestLogger`), reservas creadas/canceladas y
+  perfil actualizado. Los `.log` estan ignorados por git (`logs/.gitkeep` conserva la carpeta).
 - Los endpoints de reservas requieren sesion (401 si no).
 
 ### 2.3 Frontend - `public/js/script.js`

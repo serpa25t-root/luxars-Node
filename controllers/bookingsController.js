@@ -1,5 +1,6 @@
 const store = require('../data/bookings');
 const photographers = require('../data/photographers');
+const logger = require('../lib/logger');
 
 function sanitize(str) {
   if (!str) return '';
@@ -90,6 +91,10 @@ function create(req, res) {
   };
 
   store.save(booking);
+  logger.registrarEvento(
+    `Reserva creada ${booking.id} fotografo=${booking.photographerId} fecha=${date} hora=${time}`,
+    req.user
+  );
   return res.status(201).json({ booking });
 }
 
@@ -112,6 +117,7 @@ function cancel(req, res) {
 
   booking.status = 'Cancelada';
   store.freeSlot(booking.photographerId, booking.date, booking.time);
+  logger.registrarEvento(`Reserva cancelada ${booking.id} fotografo=${booking.photographerId}`, req.user);
   return res.json({ booking });
 }
 

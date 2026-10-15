@@ -1,0 +1,2 @@
+Esta carpeta guarda los logs diarios del servidor (logs/AAAA-MM-DD.log).
+Los archivos .log estan ignorados por git; este archivo solo conserva la carpeta.

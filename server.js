@@ -7,6 +7,7 @@ const fs = require('fs');
 const authRoutes = require('./routes/authRoutes');
 const photographersRoutes = require('./routes/photographersRoutes');
 const bookingsRoutes = require('./routes/bookingsRoutes');
+const logger = require('./lib/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,12 +20,16 @@ indexHtml = indexHtml
 
 app.use(express.json());
 
+// Registra cada peticion a /api en logs/AAAA-MM-DD.log (no bloquea la respuesta).
+app.use(logger.requestLogger);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/photographers', photographersRoutes);
 app.use('/api/bookings', bookingsRoutes);
 
 // 404 JSON para rutas /api no reconocidas
 app.use('/api', (req, res) => {
+  logger.registrarEvento(`Ruta API no encontrada: ${req.method} ${req.originalUrl}`, req.user);
   res.status(404).json({ error: 'Ruta de API no encontrada.' });
 });
 
@@ -36,4 +41,11 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log('LuxArs corriendo en http://localhost:' + PORT);
+  logger.registrarEvento(`Servidor iniciado en puerto ${PORT}`, logger.AUTOR);
+});
+
+// Atrapa errores no manejados para que el servidor no muera en silencio.
+process.on('unhandledRejection', (error) => {
+  console.error('Error no manejado:', error);
+  logger.registrarEvento(`Error no manejado: ${error && error.message ? error.message : error}`, logger.AUTOR);
 });
