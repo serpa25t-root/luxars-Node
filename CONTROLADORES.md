@@ -50,6 +50,10 @@ npm start            # abre la app en http://localhost:3000
   `[fechaISO] accion="..." usuario="..."`. Registra arranque del servidor, cada
   peticion a `/api` (middleware `requestLogger`), reservas creadas/canceladas y
   perfil actualizado. Los `.log` estan ignorados por git (`logs/.gitkeep` conserva la carpeta).
+- Respaldos: `servicios/backup.js` (`backupDatabase`) genera cada medianoche una
+  instantanea JSON en `backup/AAAA-MM-DD-HHMMSS/` (`reservas.json`, `fotografos.json`,
+  `meta.json`), programada con `node-cron` desde `server.js` (`0 0 0 * * *`,
+  configurable con `BACKUP_CRON`). Los respaldos estan ignorados por git.
 - Los endpoints de reservas requieren sesion (401 si no).
 
 ### 2.3 Frontend - `public/js/script.js`

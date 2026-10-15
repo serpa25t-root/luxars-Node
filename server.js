@@ -8,6 +8,8 @@ const authRoutes = require('./routes/authRoutes');
 const photographersRoutes = require('./routes/photographersRoutes');
 const bookingsRoutes = require('./routes/bookingsRoutes');
 const logger = require('./lib/logger');
+const cron = require('node-cron');
+const backup = require('./servicios/backup.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,6 +45,22 @@ app.listen(PORT, () => {
   console.log('LuxArs corriendo en http://localhost:' + PORT);
   logger.registrarEvento(`Servidor iniciado en puerto ${PORT}`, logger.AUTOR);
 });
+
+// Respaldo diario de la base de datos a la medianoche (00:00:00).
+// El horario se puede cambiar con la variable de entorno BACKUP_CRON.
+const HORARIO_RESPALDO = process.env.BACKUP_CRON || '0 0 0 * * *';
+if (cron.validate(HORARIO_RESPALDO)) {
+  cron.schedule(HORARIO_RESPALDO, async () => {
+    console.log('Realizando respaldo de la base de datos');
+    try {
+      await backup.backupDatabase();
+    } catch (error) {
+      console.error('Respaldo programado fallido:', error.message);
+    }
+  });
+} else {
+  console.error('BACKUP_CRON invalido, respaldo diario desactivado: ' + HORARIO_RESPALDO);
+}
 
 // Atrapa errores no manejados para que el servidor no muera en silencio.
 process.on('unhandledRejection', (error) => {

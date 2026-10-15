@@ -10,5 +10,9 @@ node_modules/
 npm-debug.log*
 logs/*.log
 
+# Respaldos diarios (solo se conserva backup/.gitkeep)
+backup/*/
+backup/*.json
+
 # OS
 .DS_Store

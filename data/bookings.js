@@ -30,6 +30,11 @@ function findById(id) {
   return reservations.find(r => r.id === id);
 }
 
+// Devuelve todas las reservas en memoria. Se usa para el respaldo diario.
+function listAll() {
+  return reservations.slice();
+}
+
 function save(booking) {
   reservations.push(booking);
   occupiedSlots.push({
@@ -46,4 +51,4 @@ function freeSlot(photographerId, date, time) {
   if (idx !== -1) occupiedSlots.splice(idx, 1);
 }
 
-module.exports = { nextId, isSlotOccupied, findByUser, findById, save, freeSlot };
+module.exports = { nextId, isSlotOccupied, findByUser, findById, listAll, save, freeSlot };

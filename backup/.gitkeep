@@ -1,0 +1,2 @@
+Esta carpeta guarda los respaldos diarios (backup/AAAA-MM-DD-HHMMSS/).
+Los respaldos estan ignorados por git; este archivo solo conserva la carpeta.
